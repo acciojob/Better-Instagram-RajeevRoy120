@@ -1,46 +1,35 @@
 //your code here
-const images = document.querySelectorAll(".image");
+const images = document.querySelectorAll('.image');
 
-let draggedElement = null;
+let draggedItem = null;
 
-// Add event listeners for drag-and-drop functionality
-images.forEach((image, index) => {
-    // Assign IDs dynamically
-    image.id = `div${index + 1}`;
-
-    // Apply background images from CSS
-    image.style.backgroundImage = getComputedStyle(document.documentElement).getPropertyValue(`--div${index + 1}`);
-
-    image.addEventListener("dragstart", (e) => {
-        draggedElement = e.target;
-        e.target.classList.add("selected"); // Highlight selected image
+images.forEach(image => {
+    image.addEventListener('dragstart', function () {
+        draggedItem = this;
+        this.classList.add("selected");
+        setTimeout(() => this.style.visibility = "hidden", 0);
     });
 
-    image.addEventListener("dragover", (e) => {
-        e.preventDefault(); // Allows the drop
+    image.addEventListener('dragend', function () {
+        setTimeout(() => this.style.visibility = "visible", 0);
+        this.classList.remove("selected");
+        draggedItem = null;
     });
 
-    image.addEventListener("dragenter", (e) => {
-        e.preventDefault();
-        e.target.style.border = "5px dashed red"; // Show visual cue
+    image.addEventListener('dragover', function (event) {
+        event.preventDefault();
     });
 
-    image.addEventListener("dragleave", (e) => {
-        e.target.style.border = "none"; // Reset border
+    image.addEventListener('dragenter', function (event) {
+        event.preventDefault();
     });
 
-    image.addEventListener("drop", (e) => {
-        e.preventDefault();
-        if (draggedElement !== e.target) {
+    image.addEventListener('drop', function () {
+        if (draggedItem !== this) {
             // Swap background images
-            let tempBg = draggedElement.style.backgroundImage;
-            draggedElement.style.backgroundImage = e.target.style.backgroundImage;
-            e.target.style.backgroundImage = tempBg;
+            let temp = this.style.backgroundImage;
+            this.style.backgroundImage = draggedItem.style.backgroundImage;
+            draggedItem.style.backgroundImage = temp;
         }
-        e.target.style.border = "none";
-    });
-
-    image.addEventListener("dragend", (e) => {
-        e.target.classList.remove("selected"); // Remove selection
     });
 });
