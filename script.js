@@ -6,13 +6,13 @@ let draggedItem = null;
 images.forEach(image => {
     image.addEventListener('dragstart', function () {
         draggedItem = this;
-        this.classList.add("selected");
-        setTimeout(() => this.style.visibility = "hidden", 0);
+        this.classList.add("dragging");
+        setTimeout(() => (this.style.visibility = "hidden"), 0);
     });
 
     image.addEventListener('dragend', function () {
-        setTimeout(() => this.style.visibility = "visible", 0);
-        this.classList.remove("selected");
+        setTimeout(() => (this.style.visibility = "visible"), 0);
+        this.classList.remove("dragging");
         draggedItem = null;
     });
 
